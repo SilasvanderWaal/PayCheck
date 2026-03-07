@@ -2,6 +2,8 @@ from app.extensions import db
 from app.models.shift import Shift
 from app.models.job import Job
 from app.shifts.ics_parser import parse_ics, ShiftCandidate
+from app.models.break_rule import BreakRule
+from app.shifts.break_calculator import calculate_break_duration
 
 def get_user_shifts(user_id: int):
     """Return all shifts for a user, most recent first."""
@@ -59,6 +61,10 @@ def import_shifts_from_ics(file_bytes: bytes, user_id: int, job_id: int) -> dict
     updated = 0
 
     for candidate in candidates:
+        delta = (candidate.end_time - candidate.start_time)
+        shift_hours = delta.total_seconds() / 3600
+        break_duration = _get_break_duration(job_id, shift_hours)
+
         existing = Shift.query.filter_by(
             user_id=user_id,
             ics_uid=candidate.unique_key
@@ -69,6 +75,7 @@ def import_shifts_from_ics(file_bytes: bytes, user_id: int, job_id: int) -> dict
             existing.end_time = candidate.end_time
             existing.notes = candidate.notes
             existing.job_id = job_id
+            existing.break_duration = break_duration
             updated += 1
         else:
             shift = Shift(
@@ -79,10 +86,15 @@ def import_shifts_from_ics(file_bytes: bytes, user_id: int, job_id: int) -> dict
                 notes=candidate.notes,
                 source="ics",
                 ics_uid=candidate.unique_key,
-                break_duration=0
+                break_duration=break_duration
             )
             db.session.add(shift)
             created += 1
 
     db.session.commit()
     return {"created": created, "updated": updated}
+
+def _get_break_duration(job_id: int, shift_hours: float) -> int:
+    """Calculate break duration for a shift based on the job's break rules."""
+    rules = BreakRule.query.filter_by(job_id=job_id).all()
+    return calculate_break_duration(shift_hours, rules)

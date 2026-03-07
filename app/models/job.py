@@ -15,6 +15,7 @@ class Job(db.Model):
 
     shifts = db.relationship("Shift", backref="job", lazy=True)
     ob_rules = db.relationship("OBRule", backref="job", lazy=True, cascade="all, delete-orphan")
+    break_rules = db.relationship("BreakRule", backref="job", lazy=True, cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<Job {self.name}>"

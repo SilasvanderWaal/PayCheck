@@ -24,6 +24,8 @@
                        class="btn btn-sm btn-outline-secondary">OB Rules</a>
                     <a href="{{ url_for('jobs.edit', job_id=job.id) }}"
                        class="btn btn-sm btn-outline-primary">Edit</a>
+                    <a href="{{ url_for('break_rules.index', job_id=job.id) }}"
+                        class="btn btn-sm btn-outline-secondary">Break Rules</a>
                 </div>
             </li>
         {% endfor %}
