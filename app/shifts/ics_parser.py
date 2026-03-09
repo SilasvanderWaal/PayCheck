@@ -31,17 +31,19 @@ def _to_utc(dt) -> datetime:
         return datetime(dt.year, dt.month, dt.day, tzinfo=timezone.utc)
 
 
-def parse_ics(file_bytes: bytes) -> List[ShiftCandidate]:
+def parse_ics(file_bytes: bytes, future_only: bool) -> List[ShiftCandidate]:
     """
     Parse an ICS file and return a list of ShiftCandidates.
     Expands recurring events up to 1 year from today.
     """
     calendar = Calendar.from_ical(file_bytes)
-
-    start_range = datetime.now(timezone.utc)
-    end_range = start_range + timedelta(days=365)
-
-    events = recurring_ical_events.of(calendar).between(start_range, end_range)
+    
+    if future_only:
+        start_range = datetime.now(timezone.utc)
+        end_range = start_range + timedelta(days=365)
+        events = recurring_ical_events.of(calendar).between(start_range, end_range)
+    else:
+        events = recurring_ical_events.of(calendar).all()
 
     candidates = []
     for event in events:
