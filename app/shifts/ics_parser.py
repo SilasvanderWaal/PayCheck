@@ -31,7 +31,7 @@ def _to_utc(dt) -> datetime:
         return datetime(dt.year, dt.month, dt.day, tzinfo=timezone.utc)
 
 
-def parse_ics(file_bytes: bytes, future_only: bool) -> List[ShiftCandidate]:
+def parse_ics(file_bytes: bytes, future_only: bool = False) -> List[ShiftCandidate]:
     """
     Parse an ICS file and return a list of ShiftCandidates.
     Expands recurring events up to 1 year from today.
