@@ -31,19 +31,19 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% for rule in rules %}
-                    <tr>
-                        <td>{{ rule.min_shift_hours }} hours</td>
-                        <td>{{ rule.break_minutes }} minutes</td>
-                        <td class="text-end">
-                            <form method="POST"
-                                  action="{{ url_for('break_rules.delete', job_id=job.id, rule_id=rule.id) }}">
-                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                                <button class="btn btn-sm btn-outline-danger">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                {% endfor %}
+                    {% for rule in rules %}
+                        <tr>
+                            <td data-label="Minimum shift">{{ rule.min_shift_hours }} hours</td>
+                            <td data-label="Break">{{ rule.break_minutes }} minutes</td>
+                            <td class="text-end">
+                                <form method="POST"
+                                    action="{{ url_for('break_rules.delete', job_id=job.id, rule_id=rule.id) }}">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button class="btn btn-sm btn-outline-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>

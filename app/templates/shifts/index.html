@@ -28,27 +28,27 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% for shift in shifts %}
-                    <tr>
-                        <td class="fw-semibold">{{ shift.job.name }}</td>
-                        <td>{{ shift.start_time.strftime("%d %b %Y %H:%M") }}</td>
-                        <td>{{ shift.end_time.strftime("%d %b %Y %H:%M") }}</td>
-                        <td>{{ shift.break_duration }}m</td>
-                        <td>{{ "%.2f"|format(shift.duration_hours) }}h</td>
-                        <td class="text-muted">{{ shift.notes or "—" }}</td>
-                        <td>
-                            <div class="d-flex gap-2 justify-content-end">
-                                <a href="{{ url_for('shifts.edit', shift_id=shift.id) }}"
-                                   class="btn btn-sm btn-outline-primary">Edit</a>
-                                <form method="POST"
-                                      action="{{ url_for('shifts.delete', shift_id=shift.id) }}">
-                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                                    <button class="btn btn-sm btn-outline-danger">Delete</button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                {% endfor %}
+                    {% for shift in shifts %}
+                        <tr>
+                            <td data-label="Job" class="fw-semibold">{{ shift.job.name }}</td>
+                            <td data-label="Start">{{ shift.start_time.strftime("%d %b %Y %H:%M") }}</td>
+                            <td data-label="End">{{ shift.end_time.strftime("%d %b %Y %H:%M") }}</td>
+                            <td data-label="Break">{{ shift.break_duration }}m</td>
+                            <td data-label="Hours">{{ "%.2f"|format(shift.duration_hours) }}h</td>
+                            <td data-label="Notes" class="text-muted">{{ shift.notes or "—" }}</td>
+                            <td>
+                                <div class="d-flex gap-2 justify-content-end">
+                                    <a href="{{ url_for('shifts.edit', shift_id=shift.id) }}"
+                                    class="btn btn-sm btn-outline-primary">Edit</a>
+                                    <form method="POST"
+                                        action="{{ url_for('shifts.delete', shift_id=shift.id) }}">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                        <button class="btn btn-sm btn-outline-danger">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
