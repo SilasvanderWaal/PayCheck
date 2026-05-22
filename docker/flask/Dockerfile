@@ -11,4 +11,5 @@ COPY . .
 
 RUN chmod -R 755 /app
 
-CMD ["flask", "run", "--host=0.0.0.0"]
+# Production default — dev compose.yml overrides this with flask run
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "2", "--timeout", "120", "run:app"]

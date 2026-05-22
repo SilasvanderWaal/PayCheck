@@ -3,27 +3,17 @@ services:
     build:
       context: .
       dockerfile: docker/flask/Dockerfile
-    command: flask run --host=0.0.0.0
     env_file: .env
     environment:
       FLASK_APP: app
-      FLASK_ENV: ${FLASK_ENV}
+      FLASK_ENV: production
     ports:
       - "5000:5000"
     depends_on:
       db:
         condition: service_healthy
         restart: true
-    develop:
-          watch:
-            - action: sync
-              path: ./app
-              target: /app/app
-            - action: sync
-              path: ./migrations
-              target: /app/migrations
-            - action: rebuild
-              path: requirements.txt
+    restart: always
 
   db:
     image: mysql:8.0
@@ -33,8 +23,6 @@ services:
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-    ports:
-      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
@@ -42,6 +30,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+    restart: always
+    # MySQL port is NOT exposed externally in production
 
 volumes:
   mysql_data:

@@ -13,3 +13,4 @@ email_validator
 requests==2.31.0
 workalendar==17.0.0
 APScheduler==3.10.4
+gunicorn==22.0.0
