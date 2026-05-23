@@ -39,7 +39,7 @@ A production-quality work schedule and payslip tracking web application built wi
 | Auth | Flask-Login, Flask-Bcrypt, Flask-WTF (CSRF) |
 | Calendar | icalendar, recurring-ical-events |
 | Scheduling | APScheduler |
-| Tax & Holidays | Custom Swedish tax engine, workalendar |
+| Tax & Holidays | Skatteverket API, Custom Swedish tax engine, workalendar |
 | Frontend | Jinja2, Bootstrap 5, Bootstrap Icons |
 | Infrastructure | Docker, Docker Compose |
 
