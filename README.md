@@ -7,7 +7,12 @@ A production-quality work schedule and payslip tracking web application built wi
 ---
 
 ## Screenshots
-Coming Soon! 
+**The following screenshots contain mockup data**
+<img width="1922" height="967" alt="dashboard" src="https://github.com/user-attachments/assets/becae0c7-d386-4bc0-bf9e-efc8b6a69e62" />
+<img width="1922" height="967" alt="shifts" src="https://github.com/user-attachments/assets/617ed47a-5121-4add-8b65-874d8590c323" />
+<img width="1922" height="967" alt="jobs" src="https://github.com/user-attachments/assets/5e0540bb-7b1a-40e1-adce-d941fd8d5889" />
+<img width="1922" height="967" alt="calendar-feeds" src="https://github.com/user-attachments/assets/f993f11d-7855-465b-ab3e-de40b6976327" />
+<img width="1922" height="967" alt="payslips" src="https://github.com/user-attachments/assets/67a0d8fc-c17a-4048-b103-ccb73d49572a" />
 
 ---
 
