@@ -36,7 +36,7 @@ def create():
         )
         flash("Shift added.", "success")
         return redirect(url_for("shifts.index"))
-    return render_template("shifts/form.html", form=form, title="Add Shift")
+    return render_template("shifts/form.html", form=form, title="Add Shift", shift=None)
 
 @shifts_bp.route("/<int:shift_id>/edit", methods=["GET", "POST"])
 @login_required
@@ -55,7 +55,7 @@ def edit(shift_id):
         )
         flash("Shift updated.", "success")
         return redirect(url_for("shifts.index"))
-    return render_template("shifts/form.html", form=form, title="Edit Shift")
+    return render_template("shifts/form.html", form=form, title="Edit Shift", shift=shift)
 
 
 @shifts_bp.route("/<int:shift_id>/delete", methods=["POST"])
@@ -78,8 +78,9 @@ def ics_import():
             user_id=current_user.id,
             job_id=form.job_id.data
         )
+        skipped_msg = f", {result['skipped']} skipped (manually edited)" if result["skipped"] else ""
         flash(
-            f"Import complete: {result['created']} created, {result['updated']} updated.",
+            f"Import complete: {result['created']} created, {result['updated']} updated{skipped_msg}.",
             "success"
         )
         return redirect(url_for("shifts.index"))

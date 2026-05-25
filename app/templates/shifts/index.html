@@ -30,7 +30,15 @@
                 <tbody>
                     {% for shift in shifts %}
                         <tr>
-                            <td data-label="Job" class="fw-semibold">{{ shift.job.name }}</td>
+                            <td data-label="Job" class="fw-semibold">
+                                {{ shift.job.name }}
+                                {% if shift.manually_edited %}
+                                <span class="badge bg-warning text-dark ms-1"
+                                      title="Manually edited — excluded from calendar sync">
+                                    <i class="bi bi-lock-fill"></i> Edited
+                                </span>
+                                {% endif %}
+                            </td>
                             <td data-label="Start">{{ shift.start_time.strftime("%d %b %Y %H:%M") }}</td>
                             <td data-label="End">{{ shift.end_time.strftime("%d %b %Y %H:%M") }}</td>
                             <td data-label="Break">{{ shift.break_duration }}m</td>

@@ -6,6 +6,17 @@
         <h4 class="mb-4">{{ title }}</h4>
         <div class="card">
             <div class="card-body p-4">
+                {% if shift and shift.source == 'ics' and shift.manually_edited %}
+                <div class="alert alert-warning d-flex align-items-center mb-3" role="alert">
+                    <i class="bi bi-lock-fill me-2 flex-shrink-0"></i>
+                    <div>This shift has been manually edited and is excluded from calendar sync updates.</div>
+                </div>
+                {% elif shift and shift.source == 'ics' %}
+                <div class="alert alert-info d-flex align-items-center mb-3" role="alert">
+                    <i class="bi bi-info-circle-fill me-2 flex-shrink-0"></i>
+                    <div>This shift was imported from a calendar feed. Saving will lock it from automatic sync updates.</div>
+                </div>
+                {% endif %}
                 <form method="POST">
                     {{ form.hidden_tag() }}
                     <div class="mb-3">

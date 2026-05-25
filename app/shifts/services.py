@@ -30,12 +30,13 @@ def create_shift(user_id: int, job_id: int, start_time, end_time, break_duration
     return shift
 
 def update_shift(shift: Shift, job_id: int, start_time, end_time, break_duration, notes: str) -> Shift:
-    """Update an existing shift."""
+    """Update an existing shift and lock it from future ICS sync overrides."""
     shift.job_id = job_id
     shift.start_time = start_time
     shift.end_time = end_time
     shift.break_duration = break_duration
     shift.notes = notes
+    shift.manually_edited = True
     db.session.commit()
     return shift
 
@@ -59,6 +60,7 @@ def import_shifts_from_ics(file_bytes: bytes, user_id: int, job_id: int) -> dict
     candidates = parse_ics(file_bytes)
     created = 0
     updated = 0
+    skipped = 0
 
     for candidate in candidates:
         delta = (candidate.end_time - candidate.start_time)
@@ -71,12 +73,16 @@ def import_shifts_from_ics(file_bytes: bytes, user_id: int, job_id: int) -> dict
         ).first()
 
         if existing:
-            existing.start_time = candidate.start_time
-            existing.end_time = candidate.end_time
-            existing.notes = candidate.notes
-            existing.job_id = job_id
-            existing.break_duration = break_duration
-            updated += 1
+            if existing.manually_edited:
+                # User has manually overridden this shift — leave it untouched
+                skipped += 1
+            else:
+                existing.start_time = candidate.start_time
+                existing.end_time = candidate.end_time
+                existing.notes = candidate.notes
+                existing.job_id = job_id
+                existing.break_duration = break_duration
+                updated += 1
         else:
             shift = Shift(
                 user_id=user_id,
@@ -92,7 +98,7 @@ def import_shifts_from_ics(file_bytes: bytes, user_id: int, job_id: int) -> dict
             created += 1
 
     db.session.commit()
-    return {"created": created, "updated": updated}
+    return {"created": created, "updated": updated, "skipped": skipped}
 
 def _get_break_duration(job_id: int, shift_hours: float) -> int:
     """Calculate break duration for a shift based on the job's break rules."""

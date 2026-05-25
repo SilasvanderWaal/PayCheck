@@ -14,6 +14,7 @@ class Shift(db.Model):
     break_duration = db.Column(db.Integer, default=0, nullable=False)
     ics_uid = db.Column(db.String(255), nullable=True)
     notes = db.Column(db.Text, nullable=True)
+    manually_edited = db.Column(db.Boolean, default=False, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     __table_args__ = (
